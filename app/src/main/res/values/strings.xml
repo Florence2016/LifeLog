@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">LifeLog</string>
+    <string name="logo_app">Logo App</string>
+    <string name="appname">AppName</string>
+    <string name="lifelog">LifeLog</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="tvLogin">Login to Account</string>
+    <string name="tvNewAcc">Need a New Account</string>
+    <string name="action_search_text">Search</string>
+    <string name="action_settings_text">Account Settings</string>
+    <string name="action_logout_text">Logout</string>
+    <string name="tvRegister">Register</string>
+    <string name="reg_btn_text">Create New Account</string>
+    <string name="reg_ext_text">Already have an account</string>
+    <string name="confirmPass">Confirm Password</string>
+    <string name="setup_name_hint">Your Name..</string>
+    <string name="setup_btn_name">Save Account Settings</string>
+    <string name="lg_img_def">Default Image</string>
+    <string name="lg_log_title">Lifegroup Name</string>
+    <string name="lg_log_attendance">Lifegroup Attendees</string>
+    <string name="lg_log_post_btn">Post</string>
+</resources>

@@ -1,0 +1,13 @@
+<rotate
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="285">
+    <shape>
+        <size
+            android:width="200dp"
+            android:height="1500dp" />
+        <gradient
+            android:startColor="@color/colorAccentDark"
+            android:endColor="#032900" />
+
+    </shape>
+</rotate>

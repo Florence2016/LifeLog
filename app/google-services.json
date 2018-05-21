@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "662626208672",
+    "firebase_url": "https://lifelog-5a060.firebaseio.com",
+    "project_id": "lifelog-5a060",
+    "storage_bucket": "lifelog-5a060.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662626208672:android:953d435fa8d68a12",
+        "android_client_info": {
+          "package_name": "lifegiverappblog.lifelog.com.lifelog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "662626208672-d7gu634nm3ic6n6t7b09l8nngln5cd07.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "lifegiverappblog.lifelog.com.lifelog",
+            "certificate_hash": "74058702cafde284083da636583f44ffba533244"
+          }
+        },
+        {
+          "client_id": "662626208672-lu0m0700hcosoreuc10c67ccducji4b4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3xpcj-9arHFAuPgzVI_6Fwg-WpQGyE5c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "662626208672-lu0m0700hcosoreuc10c67ccducji4b4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
