@@ -3,7 +3,10 @@ package lifegiverappblog.lifelog.com.lifelog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,6 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import lifegiverappblog.lifelog.com.lifelog.fragments.AccountFragment;
+import lifegiverappblog.lifelog.com.lifelog.fragments.HomeFragment;
+import lifegiverappblog.lifelog.com.lifelog.fragments.NotificationFragment;
 import lifegiverappblog.lifelog.com.lifelog.posts.LgPostActivity;
 
 public class HomeMainActivity extends AppCompatActivity {
@@ -28,6 +34,11 @@ public class HomeMainActivity extends AppCompatActivity {
 
     private String current_user_id;
     private FloatingActionButton fab_post_add;
+    private BottomNavigationView mainBottomNav;
+
+    private HomeFragment homeFragment;
+    private NotificationFragment notificationFragment;
+    private AccountFragment accountFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +51,36 @@ public class HomeMainActivity extends AppCompatActivity {
         mainToolbar = (Toolbar)findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
         getSupportActionBar().setTitle("Lifelog");
+
+        mainBottomNav = findViewById(R.id.main_bottom_nav);
+
+        //Fragments
+        homeFragment = new HomeFragment();
+        notificationFragment = new NotificationFragment();
+        accountFragment = new AccountFragment();
+
+        mainBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId())
+                {
+                    case R.id.bottom_action_home:
+                        replaceFragment(homeFragment);
+                        return true;
+
+                    case R.id.bottom_action_notification:
+                        replaceFragment(notificationFragment);
+                        return true;
+
+                    case R.id.bottom_action_account:
+                        replaceFragment(accountFragment);
+                        return true;
+
+                        default:
+                            return false;
+                }
+            }
+        });
 
         fab_post_add = findViewById(R.id.fab_post);
         fab_post_add.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +158,14 @@ public class HomeMainActivity extends AppCompatActivity {
     private void logOut() {
        mAuth.signOut();
        sendToLogin();
+    }
+
+    private void replaceFragment(Fragment fragment){
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.commit();
+
     }
 
 }
