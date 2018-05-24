@@ -26,4 +26,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="card_vew_username">Username</string>
+    <string name="card_view_date">Date</string>
+    <string name="card_view_attendees_holder">Lorep ipsum dolor sit amet, soluta regione ubanitas vis in, qui elit populo ut.</string>
+    <string name="card_view_attendess">\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="card_view_image">Lifegroup_Image</string>
 </resources>
