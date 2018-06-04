@@ -177,7 +177,7 @@ public class SetupAccountActivity extends AppCompatActivity {
             }
 
         Map<String, String> userMap = new HashMap<>();
-        userMap.put("name", username);
+        userMap.put("username", username);
         userMap.put("image", download_uri.toString());
 
         firebaseFirestore.collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {

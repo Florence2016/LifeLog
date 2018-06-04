@@ -48,49 +48,52 @@ public class HomeMainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        mainToolbar = (Toolbar)findViewById(R.id.main_toolbar);
+        mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
         getSupportActionBar().setTitle("Lifelog");
 
-        mainBottomNav = findViewById(R.id.main_bottom_nav);
+        if(mAuth.getCurrentUser()!=null)
+        {
+            mainBottomNav = findViewById(R.id.main_bottom_nav);
 
-        //Fragments
-        homeFragment = new HomeFragment();
-        notificationFragment = new NotificationFragment();
-        accountFragment = new AccountFragment();
+            //Fragments
+            homeFragment = new HomeFragment();
+            notificationFragment = new NotificationFragment();
+            accountFragment = new AccountFragment();
+            replaceFragment(homeFragment);
 
-        mainBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId())
-                {
-                    case R.id.bottom_action_home:
-                        replaceFragment(homeFragment);
-                        return true;
+            mainBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.bottom_action_home:
+                            replaceFragment(homeFragment);
+                            return true;
 
-                    case R.id.bottom_action_notification:
-                        replaceFragment(notificationFragment);
-                        return true;
+                        case R.id.bottom_action_notification:
+                            replaceFragment(notificationFragment);
+                            return true;
 
-                    case R.id.bottom_action_account:
-                        replaceFragment(accountFragment);
-                        return true;
+                        case R.id.bottom_action_account:
+                            replaceFragment(accountFragment);
+                            return true;
 
                         default:
                             return false;
+                    }
                 }
-            }
-        });
+            });
+            fab_post_add = findViewById(R.id.fab_post);
+            fab_post_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-        fab_post_add = findViewById(R.id.fab_post);
-        fab_post_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                    Intent LgPostIntent = new Intent(HomeMainActivity.this, LgPostActivity.class);
+                    startActivity(LgPostIntent);
+                }
+            });
 
-                Intent LgPostIntent = new Intent(HomeMainActivity.this, LgPostActivity.class);
-                startActivity(LgPostIntent);
-            }
-        });
+        }
     }
 
     @Override

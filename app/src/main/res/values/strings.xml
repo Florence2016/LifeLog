@@ -32,4 +32,5 @@
     <string name="card_view_attendess">\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
     <string name="card_view_image">Lifegroup_Image</string>
     <string name="card_view_userimage">Userimage</string>
+    <string name="card_view_lifegroup">Lifegroup</string>
 </resources>

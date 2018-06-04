@@ -104,6 +104,7 @@ public class LgPostActivity extends AppCompatActivity {
                 if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(attendee) && lg_post_ImageUri != null){
 
                     lg_log_progress.setVisibility(View.VISIBLE);
+                    Toast.makeText(LgPostActivity.this, "Uploading...", Toast.LENGTH_LONG).show();
 
                     final String randomName = UUID.randomUUID().toString();
 
