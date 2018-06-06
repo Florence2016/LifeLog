@@ -30,7 +30,12 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".posts.LgPostActivity" android:parentActivityName=".HomeMainActivity"></activity>
+        <activity
+            android:name=".posts.LgPostActivity"
+            android:parentActivityName=".HomeMainActivity" />
+        <activity android:name=".comments.CommentActivity" />
+        <activity android:name=".comments.CommentsActivity" />
+        <activity android:name=".comments.CommentsActivity"></activity>
     </application>
 
 </manifest>

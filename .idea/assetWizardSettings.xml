@@ -44,8 +44,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="outputName" value="action_search" />
+                                      <entry key="imageAsset" value="C:\Users\fsuller\Downloads\green_leaf.png" />
+                                      <entry key="outputName" value="action_like_leaf_green" />
                                     </map>
                                   </option>
                                 </PersistentState>

@@ -55,16 +55,19 @@ public class LoginActivity extends AppCompatActivity {
 
             if(!TextUtils.isEmpty(loginEmail) && !TextUtils.isEmpty(loginPass)){
                 mProgressBar.setVisibility(View.VISIBLE);
+                Toast.makeText(LoginActivity.this, "Logging In...", Toast.LENGTH_LONG).show();
                 mAuth.signInWithEmailAndPassword(loginEmail, loginPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if(task.isSuccessful()){
                             sendToHomeMain();
+
+
                         }
                         else{
                             String errorMessage = task. getException().getMessage();
-                            Toast.makeText(LoginActivity.this, "Error:"+ errorMessage, Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Error Login:"+ errorMessage, Toast.LENGTH_LONG).show();
                         }
                         mProgressBar.setVisibility(View.INVISIBLE);
                     }

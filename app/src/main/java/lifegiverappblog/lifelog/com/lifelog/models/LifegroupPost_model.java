@@ -2,15 +2,15 @@ package lifegiverappblog.lifelog.com.lifelog.models;
 
 import java.util.Date;
 
-public class LifegroupPost_model {
+public class LifegroupPost_model extends LifegroupPostId{
 
-    public String user_id;
-    public String name;
-    public String attendee;
-    public String image_url;
-    public String image_thumb;
+    private String user_id;
+    private String name;
+    private String attendee;
+    private String image_url;
+    private String image_thumb;
 
-    public Date timestamp;
+    private Date timestamp;
 
     public LifegroupPost_model(){}
 

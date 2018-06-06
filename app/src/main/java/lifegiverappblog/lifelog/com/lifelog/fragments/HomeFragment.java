@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -30,8 +33,14 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView lifegroup_log_post_view;
     private List<LifegroupPost_model> lifegroup_list;
+
     private FirebaseFirestore firebaseFirestore;
+    private FirebaseAuth firebaseAuth;
     private LifegroupRecyclerAdapter lifegroupRecyclerAdapter;
+
+    private DocumentSnapshot lastVisible;
+    private Boolean isFirstPageFirstLoad = true;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -45,30 +54,92 @@ public class HomeFragment extends Fragment {
 
         lifegroup_list = new ArrayList<>();
         lifegroup_log_post_view = view.findViewById(R.id.post_view_lg_log);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
         lifegroupRecyclerAdapter = new LifegroupRecyclerAdapter(lifegroup_list);
-
-        lifegroup_log_post_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+        lifegroup_log_post_view.setLayoutManager(new LinearLayoutManager(container.getContext()));
         lifegroup_log_post_view.setAdapter(lifegroupRecyclerAdapter);
+        lifegroup_log_post_view.setHasFixedSize(true);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseFirestore.collection("Posts").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                for(DocumentChange doc: documentSnapshots.getDocumentChanges())
-                {
-                    if(doc.getType() == DocumentChange.Type.ADDED)
-                    {
-                        LifegroupPost_model lifegroup_model = doc.getDocument().toObject(LifegroupPost_model.class);
-                        lifegroup_list.add(lifegroup_model);
+        if(firebaseAuth.getCurrentUser() != null) {
 
-                        lifegroupRecyclerAdapter.notifyDataSetChanged();
+            firebaseFirestore = FirebaseFirestore.getInstance();
+
+            lifegroup_log_post_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                    Boolean reachedBottom = !recyclerView.canScrollVertically(1);
+
+                    if(reachedBottom){
+                        loadMorePost();
                     }
                 }
-            }
-        });
+            });
 
-        // Inflate the layout for this fragment
+            Query firstQuery = firebaseFirestore.collection("Posts").orderBy("timestamp", Query.Direction.DESCENDING).limit(3);
+            firstQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
+                    if (!documentSnapshots.isEmpty()) {
+                        if (isFirstPageFirstLoad) {
+                            lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                            lifegroup_list.clear();
+                        }
+                        for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+                            if (doc.getType() == DocumentChange.Type.ADDED) {
+                                String LGPostId = doc.getDocument().getId();
+                                LifegroupPost_model lifelgPost = doc.getDocument().toObject(LifegroupPost_model.class).withId(LGPostId);
+
+                                if (isFirstPageFirstLoad) {
+                                    lifegroup_list.add(lifelgPost);
+                                } else {
+                                    lifegroup_list.add(0, lifelgPost);
+                                }
+                                lifegroupRecyclerAdapter.notifyDataSetChanged();
+                            }
+                        }
+                        isFirstPageFirstLoad = false;
+                    }
+                }
+            });
+        }
         return view;
+    }
+    public void loadMorePost(){
+
+        if(firebaseAuth.getCurrentUser() != null) {
+
+            Query nextQuery = firebaseFirestore.collection("Posts")
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .startAfter(lastVisible)
+                    .limit(3);
+
+            nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
+                    if (!documentSnapshots.isEmpty()) {
+                        lastVisible = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                        for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+
+                            if (doc.getType() == DocumentChange.Type.ADDED) {
+
+                                String LGPostId = doc.getDocument().getId();
+                                LifegroupPost_model lgPost = doc.getDocument().toObject(LifegroupPost_model.class).withId(LGPostId);
+                                lifegroup_list.add(lgPost);
+                                lifegroupRecyclerAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                }
+            });
+
+        }
+
     }
 
 }

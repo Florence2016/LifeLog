@@ -11,4 +11,7 @@
 
     <color name="colorSecondary">#76FF03</color>
     <color name="colorSecondaryLight">#d5ffb3</color>
+
+    <color name="likeBtnGray">#747474</color>
+    <color name="likeBtnAccent">#7bca46</color>
 </resources>
