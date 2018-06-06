@@ -66,6 +66,7 @@ public class LifegroupRecyclerAdapter extends RecyclerView.Adapter<LifegroupRecy
 
         final String lgPostId = lifegroup_list.get(position).LifegroupPostId;
         final String currentUserId = firebaseAuth.getCurrentUser().getUid();
+
         String attendees_data,lifegroup_data, lifegroup_image_url, lifegroup_thumbUri;
 
         attendees_data = lifegroup_list.get(position).getAttendee();
@@ -172,6 +173,23 @@ public class LifegroupRecyclerAdapter extends RecyclerView.Adapter<LifegroupRecy
                 context.startActivity(commentIntent);
             }
         });
+
+        //Get Comments Count
+        firebaseFirestore.collection("Posts/" + lgPostId + "/Comments").addSnapshotListener(((HomeMainActivity) context), new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e)
+            {
+                if(!documentSnapshots.isEmpty())
+                {
+                    int countComments = documentSnapshots.size();
+                    holder.updateCommentsCount(countComments);
+
+                } else
+                {
+                    holder.updateCommentsCount(0);
+                }
+            }
+        });
     }
 
     @Override
@@ -183,7 +201,7 @@ public class LifegroupRecyclerAdapter extends RecyclerView.Adapter<LifegroupRecy
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         private View mView;
-        private TextView attendeeView, lifegroupView, usernameView, postdateView;
+        private TextView attendeeView, lifegroupView, usernameView, postdateView, commentCountView;
         private CircleImageView userimageView;
 
         private ImageView liferoupImageView;
@@ -246,6 +264,12 @@ public class LifegroupRecyclerAdapter extends RecyclerView.Adapter<LifegroupRecy
         {
             leafLikeCount =mView.findViewById(R.id.like_leaf_count);
             leafLikeCount.setText(count + " Likes");
+        }
+
+        public void updateCommentsCount(int countComment)
+        {
+            commentCountView =mView.findViewById(R.id.lg_comment_count);
+            commentCountView.setText(countComment + " Comments");
         }
     }
 }

@@ -214,6 +214,10 @@ public class LgPostActivity extends AppCompatActivity {
 
 
                 }
+                else
+                    {
+                        Toast.makeText(LgPostActivity.this, "Fill up all the fields", Toast.LENGTH_LONG).show();
+                    }
 
             }
         });

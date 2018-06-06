@@ -1,11 +1,13 @@
 package lifegiverappblog.lifelog.com.lifelog.comments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lifegiverappblog.lifelog.com.lifelog.HomeMainActivity;
 import lifegiverappblog.lifelog.com.lifelog.R;
 import lifegiverappblog.lifelog.com.lifelog.adapters.CommentsRecyclerAdapter;
 import lifegiverappblog.lifelog.com.lifelog.models.Comments;
@@ -51,7 +54,6 @@ public class CommentsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
-
 
         commentToolbar = findViewById(R.id.comment_toolbar);
         setSupportActionBar(commentToolbar);
@@ -80,22 +82,15 @@ public class CommentsActivity extends AppCompatActivity {
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
 
                         if (!documentSnapshots.isEmpty()) {
-
                             for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
-
                                 if (doc.getType() == DocumentChange.Type.ADDED) {
-
                                     String commentId = doc.getDocument().getId();
                                     Comments comments = doc.getDocument().toObject(Comments.class);
                                     commentsList.add(comments);
                                     commentsRecyclerAdapter.notifyDataSetChanged();
-
-
                                 }
                             }
-
                         }
-
                     }
                 });
 
@@ -103,8 +98,8 @@ public class CommentsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String comment_message = comment_field.getText().toString();
-
+                final String comment_message = comment_field.getText().toString();
+                if(!TextUtils.isEmpty(comment_message)){
 
                 Map<String, Object> commentsMap = new HashMap<>();
                 commentsMap.put("message", comment_message);
@@ -116,18 +111,21 @@ public class CommentsActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentReference> task) {
 
                         if(!task.isSuccessful()){
-
                             Toast.makeText(CommentsActivity.this, "Error Posting Comment : " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-
                         } else {
-
                             comment_field.setText("");
+                            Toast.makeText(CommentsActivity.this, "Comment Sent", Toast.LENGTH_LONG).show();
 
+                            startActivity(new Intent(CommentsActivity.this, HomeMainActivity.class));
+                            finish();
                         }
-
                     }
                 });
-
+                }
+                else
+                    {
+                        Toast.makeText(CommentsActivity.this, "Fill up the field to comment", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

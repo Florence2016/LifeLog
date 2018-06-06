@@ -132,6 +132,7 @@ public class HomeFragment extends Fragment {
                                 LifegroupPost_model lgPost = doc.getDocument().toObject(LifegroupPost_model.class).withId(LGPostId);
                                 lifegroup_list.add(lgPost);
                                 lifegroupRecyclerAdapter.notifyDataSetChanged();
+
                             }
                         }
                     }
