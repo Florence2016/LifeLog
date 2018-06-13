@@ -5,13 +5,25 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,12 +33,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 import lifegiverappblog.lifelog.com.lifelog.fragments.AccountFragment;
 import lifegiverappblog.lifelog.com.lifelog.fragments.HomeFragment;
 import lifegiverappblog.lifelog.com.lifelog.fragments.NotificationFragment;
 import lifegiverappblog.lifelog.com.lifelog.posts.LgPostActivity;
 
-public class HomeMainActivity extends AppCompatActivity {
+public class HomeMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar mainToolbar;
     private FirebaseAuth mAuth;
@@ -36,6 +50,8 @@ public class HomeMainActivity extends AppCompatActivity {
     private FloatingActionButton fab_post_add;
     private BottomNavigationView mainBottomNav;
 
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     private HomeFragment homeFragment;
     private NotificationFragment notificationFragment;
     private AccountFragment accountFragment;
@@ -48,54 +64,30 @@ public class HomeMainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        mainToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mainToolbar);
-        getSupportActionBar().setTitle("Lifelog");
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         if(mAuth.getCurrentUser()!=null)
         {
-            mainBottomNav = findViewById(R.id.main_bottom_nav);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, mainToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
 
-            //Fragments
-            homeFragment = new HomeFragment();
-            notificationFragment = new NotificationFragment();
-            accountFragment = new AccountFragment();
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
 
-            initializeFragment();
+            viewPager = (ViewPager) findViewById(R.id.viewpager);
+            setupViewPager(viewPager);
 
-            mainBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout.setupWithViewPager(viewPager);
+            setupTabIcons();
 
-                    Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_container);
 
-                    switch (item.getItemId()) {
-                        case R.id.bottom_action_home:
-                            replaceFragment(homeFragment, currentFragment);
-                            return true;
-
-                        case R.id.bottom_action_notification:
-                            replaceFragment(notificationFragment, currentFragment);
-                            return true;
-
-                        case R.id.bottom_action_account:
-                            replaceFragment(accountFragment, currentFragment);
-                            return true;
-
-                        default:
-                            return false;
-                    }
-                }
-            });
-            fab_post_add = findViewById(R.id.fab_post);
-            fab_post_add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Intent LgPostIntent = new Intent(HomeMainActivity.this, LgPostActivity.class);
-                    startActivity(LgPostIntent);
-                }
-            });
+            FABmenuBtn();
 
         }
     }
@@ -133,6 +125,81 @@ public class HomeMainActivity extends AppCompatActivity {
                 });
             }
     }
+    /**
+     * Adding custom view to tab
+     */
+    private void setupTabIcons() {
+
+        TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tabOne.setText("Home");
+        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_home_black_24dp, 0, 0);
+        tabLayout.getTabAt(0).setCustomView(tabOne);
+
+        TextView tabTwo = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tabTwo.setText("Accounts");
+        tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_person_black_24dp, 0, 0);
+        tabLayout.getTabAt(1).setCustomView(tabTwo);
+
+        TextView tabThree = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tabThree.setText("Notification");
+        tabThree.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_notifications_black_24dp, 0, 0);
+        tabLayout.getTabAt(2).setCustomView(tabThree);
+
+    }
+
+    /**
+     * Adding fragments to ViewPager
+     * @param viewPager
+     */
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new HomeFragment(), "Home");
+        adapter.addFrag(new AccountFragment(), "Accounts");
+        adapter.addFrag(new NotificationFragment(), "Notification");
+        viewPager.setAdapter(adapter);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final java.util.List<Fragment> mFragmentList = new ArrayList<>();
+        private final java.util.List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFrag(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+
+            // return null to display only the icon
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+            finish();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -167,43 +234,119 @@ public class HomeMainActivity extends AppCompatActivity {
        mAuth.signOut();
        sendToLogin();
     }
+    private void FABmenuBtn() {
 
-    private void replaceFragment(Fragment fragment, Fragment currentFragment){
+        final FloatingActionButton mFab = (FloatingActionButton) findViewById(R.id.homeBtn);
+        FloatingActionButton mFabNews = (FloatingActionButton) findViewById(R.id.AddNewsFeedBtn);
+        FloatingActionButton mFabNewfriend = (FloatingActionButton) findViewById(R.id.AddNewFriendBtn);
+        FloatingActionButton mFabLifegroups = (FloatingActionButton) findViewById(R.id.AddLifegroupsAttendanceBtn);
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        if(fragment == homeFragment){
-            fragmentTransaction.hide(accountFragment);
-            fragmentTransaction.hide(notificationFragment);
-        }
+        final LinearLayout mLGLayout = (LinearLayout) findViewById(R.id.AddNewsLayout);
+        final LinearLayout mNFLayout = (LinearLayout) findViewById(R.id.AddNewFriendLayout);
+        final LinearLayout mANNLayout = (LinearLayout) findViewById(R.id.AddLifegroupsLayout);
 
-        if(fragment == accountFragment){
-            fragmentTransaction.hide(homeFragment);
-            fragmentTransaction.hide(notificationFragment);
-        }
+        final Animation mShowButton = AnimationUtils.loadAnimation(HomeMainActivity.this, R.anim.show_button);
+        final Animation mHideButton = AnimationUtils.loadAnimation(HomeMainActivity.this, R.anim.hide_button);
+        final Animation mShowLayout = AnimationUtils.loadAnimation(HomeMainActivity.this, R.anim.show_layout);
+        final Animation mHideLayout = AnimationUtils.loadAnimation(HomeMainActivity.this, R.anim.hide_layout);
 
-        if(fragment == notificationFragment){
-            fragmentTransaction.hide(homeFragment);
-            fragmentTransaction.hide(accountFragment);
-        }
-        fragmentTransaction.show(fragment);
-        //fragmentTransaction.replace(R.id.main_container, fragment);
-        fragmentTransaction.commit();
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mLGLayout.getVisibility() == View.VISIBLE && mNFLayout.getVisibility() == View.VISIBLE && mANNLayout.getVisibility() == View.VISIBLE) {
+                    mLGLayout.setVisibility(View.GONE);
+                    mNFLayout.setVisibility(View.GONE);
+                    mANNLayout.setVisibility(View.GONE);
+
+                    mLGLayout.startAnimation(mHideLayout);
+                    mNFLayout.startAnimation(mHideLayout);
+                    mANNLayout.startAnimation(mHideLayout);
+
+                    mFab.startAnimation(mHideButton);
+                } else {
+                    mLGLayout.setVisibility(View.VISIBLE);
+                    mNFLayout.setVisibility(View.VISIBLE);
+                    mANNLayout.setVisibility(View.VISIBLE);
+
+                    mLGLayout.startAnimation(mShowLayout);
+                    mNFLayout.startAnimation(mShowLayout);
+                    mANNLayout.startAnimation(mShowLayout);
+
+                    mFab.startAnimation(mShowButton);
+                }
+            }
+        });
+
+        mFabNews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeMainActivity.this, LgPostActivity.class));
+
+                mLGLayout.setVisibility(View.GONE);
+                mNFLayout.setVisibility(View.GONE);
+                mANNLayout.setVisibility(View.GONE);
+
+
+            }
+        });
+
+        mFabNewfriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeMainActivity.this, LgPostActivity.class));
+
+
+                mLGLayout.setVisibility(View.GONE);
+                mNFLayout.setVisibility(View.GONE);
+                mANNLayout.setVisibility(View.GONE);
+            }
+        });
+
+        mFabLifegroups.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeMainActivity.this, LgPostActivity.class));
+
+                mLGLayout.setVisibility(View.GONE);
+                mNFLayout.setVisibility(View.GONE);
+                mANNLayout.setVisibility(View.GONE);
+            }
+        });
+
 
     }
 
-    private void initializeFragment(){
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if (id == R.id.nav_Calendar) {
+            startActivity(new Intent(HomeMainActivity.this, RegisterActivity.class));
+            finish();
+        } else if (id == R.id.nav_todolist) {
+            startActivity(new Intent(HomeMainActivity.this, RegisterActivity.class));
+            finish();
+        } else if (id == R.id.nav_columnar) {
+            startActivity(new Intent(HomeMainActivity.this, RegisterActivity.class));
+            finish();
+        } else if (id == R.id.nav_charts) {
+            startActivity(new Intent(HomeMainActivity.this, RegisterActivity.class));
+            finish();
+        }
+        else if (id == R.id.nav_organization) {
+            startActivity(new Intent(HomeMainActivity.this, RegisterActivity.class));
+            finish();
+        }
+        else if (id == R.id.nav_About) {
+            startActivity(new Intent(HomeMainActivity.this, RegisterActivity.class));
+            finish();
+        }
 
-        fragmentTransaction.add(R.id.main_container, homeFragment);
-        fragmentTransaction.add(R.id.main_container, notificationFragment);
-        fragmentTransaction.add(R.id.main_container, accountFragment);
-
-        fragmentTransaction.hide(notificationFragment);
-        fragmentTransaction.hide(accountFragment);
-
-        fragmentTransaction.commit();
-
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
 }

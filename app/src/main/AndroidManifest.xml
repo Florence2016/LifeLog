@@ -33,9 +33,10 @@
         <activity
             android:name=".posts.LgPostActivity"
             android:parentActivityName=".HomeMainActivity" />
-        <activity android:name=".comments.CommentActivity" />
-        <activity android:name=".comments.CommentsActivity" />
-        <activity android:name=".comments.CommentsActivity"></activity>
+
+        <activity android:name=".comments.CommentsActivity"
+            android:parentActivityName=".HomeMainActivity"/>
+
     </application>
 
 </manifest>

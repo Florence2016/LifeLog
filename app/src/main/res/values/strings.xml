@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">LifeLog</string>
     <string name="logo_app">Logo App</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    <string name="next">Next</string>
+    <string name="skip">Skip</string>
+    <string name="start">Start</string>
+
     <string name="appname">AppName</string>
     <string name="lifelog">LifeLog</string>
     <string name="email">Email</string>
@@ -41,4 +50,7 @@
     <string name="hint_comment_here">Comment here</string>
     <string name="user_image_commenter">Userimage</string>
     <string name="fragment_account">Account Fragment</string>
+    <string name="comment_date">Date</string>
+    <string name="comment_image_holder">Image Commented</string>
+
 </resources>

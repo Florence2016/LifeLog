@@ -3,9 +3,11 @@ package lifegiverappblog.lifelog.com.lifelog.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -31,6 +34,7 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
     public CommentsRecyclerAdapter(List<Comments> commentsList)
     {
         this.commentsList = commentsList;
+
     }
 
     @Override
@@ -69,6 +73,10 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
                 }
             }
         });
+        //Date posted method
+        long milliseconds = commentsList.get(position).getTimestamp().getTime();
+        String dateString = DateFormat.format("MM/dd/yyyy", new Date(milliseconds)).toString();
+        holder.setTime(dateString);
 
     }
 
@@ -88,8 +96,8 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
         private View mView;
         private TextView comment_message;
         private CircleImageView userimageView;
-        private TextView usernameView;
-
+        private TextView usernameView, postdateCommentView;
+        private ImageView postimageCommentView;
 
         public ViewHolder(View itemView)
         {
@@ -114,6 +122,18 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
             userimageView = mView.findViewById(R.id.comment_image);
             Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(userImage).into(userimageView);
         }
+        public void setTime(String date)
+        {
+            postdateCommentView = mView.findViewById(R.id.comment_date);
+            postdateCommentView.setText(date);
+        }
+        public void setPostimageCommentView(String commentImage)
+        {
+            postimageCommentView = mView.findViewById(R.id.comment_imageView);
+            RequestOptions placeholderOption = new RequestOptions();
+            placeholderOption.placeholder(R.drawable.image_placeholder);
 
+            Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(commentImage).into(postimageCommentView);
+        }
     }
 }

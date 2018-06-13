@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_Calendar"
+            android:icon="@mipmap/ic_lifegiver"
+            android:title="Lifegiver Calendar"
+            />
+        <item
+            android:id="@+id/nav_todolist"
+            android:icon="@mipmap/ic_lifegiver"
+            android:title="To do List" />
+        <item
+            android:id="@+id/nav_columnar"
+            android:icon="@mipmap/ic_lifegiver"
+            android:title="Columnar" />
+
+        <item
+            android:id="@+id/nav_charts"
+            android:icon="@mipmap/ic_lifegiver"
+            android:title="Monthly Charts" />
+    </group>
+
+    <item android:title="Others">
+    <menu>
+        <item
+            android:id="@+id/nav_organization"
+            android:icon="@mipmap/ic_lifegiver"
+            android:title="Organizational Chart" />
+        <item
+            android:id="@+id/nav_About"
+            android:icon="@mipmap/ic_lifegiver"
+            android:title="About Us" />
+    </menu>
+    </item>
+
+
+
+</menu>

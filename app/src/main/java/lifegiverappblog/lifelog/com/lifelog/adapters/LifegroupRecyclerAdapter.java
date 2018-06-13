@@ -67,7 +67,7 @@ public class LifegroupRecyclerAdapter extends RecyclerView.Adapter<LifegroupRecy
         final String lgPostId = lifegroup_list.get(position).LifegroupPostId;
         final String currentUserId = firebaseAuth.getCurrentUser().getUid();
 
-        String attendees_data,lifegroup_data, lifegroup_image_url, lifegroup_thumbUri;
+        final String attendees_data,lifegroup_data, lifegroup_image_url, lifegroup_thumbUri;
 
         attendees_data = lifegroup_list.get(position).getAttendee();
         holder.setAttendeeText(attendees_data);
@@ -170,6 +170,7 @@ public class LifegroupRecyclerAdapter extends RecyclerView.Adapter<LifegroupRecy
             public void onClick(View view) {
                 Intent commentIntent = new Intent(context, CommentsActivity.class);
                 commentIntent.putExtra("lg_post_id", lgPostId);
+                commentIntent.putExtra("comment_post_image", lifegroup_image_url);
                 context.startActivity(commentIntent);
             }
         });

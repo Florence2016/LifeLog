@@ -11,21 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></android.support.v7.widget.Toolbar>
-
-    <TextView
-        android:id="@+id/comment_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/label_comment"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comment_toolbar" />
 
     <EditText
         android:id="@+id/comment_field"
@@ -43,15 +32,17 @@
         app:layout_constraintEnd_toStartOf="@+id/comment_post_btn"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/comment_post_btn"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/colorPrimary"
         android:contentDescription="@string/user_image_commenter"
         android:padding="8dp"
-        android:src="@drawable/profile_placeholder"
+        android:src="@drawable/ic_menu_send"
+        app:backgroundTint="@color/common_google_signin_btn_text_light_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -59,13 +50,25 @@
         android:id="@+id/comment_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/comment_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comment_label" />
+        app:layout_constraintTop_toBottomOf="@+id/comment_imageView" />
+
+    <ImageView
+        android:id="@+id/comment_imageView"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:contentDescription="@string/comment_image_holder"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.423"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/comment_toolbar"
+        app:srcCompat="@drawable/image_placeholder" />
 
 </android.support.constraint.ConstraintLayout>

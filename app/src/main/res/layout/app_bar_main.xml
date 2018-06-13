@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".HomeMainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorTextDark"
+            />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_main"
+        />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/homeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:clickable="true"
+        android:src="@mipmap/ic_add_white_24dp"
+        app:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
+        app:fabSize="normal" />
+
+
+    <LinearLayout
+        android:id="@+id/AddNewsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="180dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/AddNewsFeedBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorTertiary"
+            android:clickable="true"
+            app:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
+            app:elevation="0dp"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_add_news" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/AddNewFriendLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="130dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/AddNewFriendBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorTertiary"
+            android:clickable="true"
+            app:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
+            app:elevation="0dp"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/submenu_icon_add_newfriend" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/AddLifegroupsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="80dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/AddLifegroupsAttendanceBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorTertiary"
+            android:clickable="true"
+            app:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
+            app:elevation="0dp"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/submenu_icon_add_lifegroup" />
+
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
